@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agri 2025 MCQ - Interactive</title>
+<style>
+body{font-family:Arial; background:#f4f6f9; margin:0; padding:12px;}
+.header{background:#0b5e2a; color:white; padding:16px; border-radius:12px; text-align:center;}
+.card{background:white; border-radius:12px; padding:14px; margin:12px 0; box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.q-title{font-weight:bold; font-size:16px; margin-bottom:8px}
+.options label{display:block; padding:8px 10px; margin:4px 0; border:1px solid #ddd; border-radius:8px; cursor:pointer}
+.options label:hover{background:#f0f7f0}
+.result{margin-top:6px; font-weight:bold;}
+.correct{background:#d4edda !important; border-color:#28a745 !important}
+.wrong{background:#f8d7da !important; border-color:#dc3545 !important}
+.btn{padding:12px 20px; border:none; border-radius:10px; font-size:16px; cursor:pointer; margin:6px; display:block; width:100%}
+.btn-check{background:#0b5e2a; color:white;}
+.btn-reset{background:#6c757d; color:white;}
+.score-box{font-size:20px; font-weight:bold; text-align:center; padding:16px; background:#fff3cd; border-radius:12px; margin:12px 0; display:none}
+</style>
+</head>
+<body>
+<div class="header">
+<h2 style="margin:0">Agri 2025 - MCQ Interactive (50 Questions)</h2>
+<p>Tick කරලා Check ඔබන්න - හරි/වැරදි එක්ක ලකුණු එනවා</p>
+</div>
+<div id="quiz"></div>
+<button class="btn btn-check" onclick="checkAll()">Check Answers</button>
+<button class="btn btn-reset" onclick="resetAll()">Reset</button>
+<div id="scoreBox" class="score-box"></div>
+<script>
+const answers = {1: 2, 11: 5, 21: 4, 31: 1, 41: 2, 2: 3, 12: 1, 22: 5, 32: 3, 42: 2, 3: 1, 13: 5, 23: 2, 33: 2, 43: 4, 4: 5, 14: 5, 24: 3, 34: 3, 44: 1, 5: 3, 15: 5, 25: 3, 35: 1, 45: 4, 6: 5, 16: 1, 26: 4, 36: 4, 46: 4, 7: 5, 17: 1, 27: 2, 37: 5, 47: 2, 8: 4, 18: 4, 28: 3, 38: 1, 48: 2, 9: 1, 19: 3, 29: 5, 39: 4, 49: 1, 10: 3, 20: 4, 30: 2, 40: 3, 50: 3};
+const quizDiv = document.getElementById('quiz');
+for(let i=1;i<=50;i++){
+  let card = document.createElement('div');
+  card.className='card';
+  card.innerHTML = `<div class="q-title">ප්‍රශ්නය ${i} - Question ${i}</div><div class="options">${[1,2,3,4,5].map(opt=>`<label id="label-${i}-${opt}"><input type="radio" name="q${i}" value="${opt}"> (${opt})</label>`).join('')}</div><div class="result" id="result-${i}"></div>`;
+  quizDiv.appendChild(card);
+}
+function checkAll(){
+  let score=0, attempted=0;
+  for(let i=1;i<=50;i++){
+    let sel = document.querySelector(`input[name="q${i}"]:checked`);
+    let res = document.getElementById(`result-${i}`);
+    for(let o=1;o<=5;o++) document.getElementById(`label-${i}-${o}`).classList.remove('correct','wrong');
+    if(!sel){ res.innerHTML='⚠️ තෝරලා නෑ'; res.style.color='#856404'; continue; }
+    attempted++;
+    let correct = answers[i];
+    let val = parseInt(sel.value);
+    if(val===correct){
+      res.innerHTML=`✔ හරි! උත්තරය (${correct})`; res.style.color='green';
+      document.getElementById(`label-${i}-${val}`).classList.add('correct'); score++;
+    } else {
+      res.innerHTML=`✖ වැරදි! හරි උත්තරය (${correct})`; res.style.color='red';
+      document.getElementById(`label-${i}-${val}`).classList.add('wrong');
+      document.getElementById(`label-${i}-${correct}`).classList.add('correct');
+    }
+  }
+  let box = document.getElementById('scoreBox');
+  box.style.display='block';
+  box.innerHTML=`ඔයාගේ ලකුණු: ${score} / 50<br>Attempted: ${attempted}`;
+}
+function resetAll(){
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.result').forEach(r=>r.innerHTML='');
+  document.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+  document.getElementById('scoreBox').style.display='none';
+}
+</script>
+</body>
+</html>
